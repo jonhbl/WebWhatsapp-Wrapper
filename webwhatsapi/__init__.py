@@ -89,7 +89,7 @@ class WhatsAPIDriver(object):
         "UnreadChatBanner": ".message-list",
         "ReconnectLink": ".action",
         "WhatsappQrIcon": "span.icon:nth-child(2)",
-        "QRReloader": "div[data-ref] > span > div",
+        "QRReloader": "._2znac",
         "OpenHereButton": "div[data-animate-modal-body=true] div[role=button]:nth-child(2)",
     }
 
@@ -337,7 +337,11 @@ class WhatsAPIDriver(object):
 
     def get_qr(self, filename=None):
         """Get pairing QR code from client"""
-        if "Click to reload QR code" in self.driver.page_source:
+        if(self.driver.execute_script("return document.documentElement.lang") == 'pt-BR'):
+            qrText = 'Clique para recarregar o código QR'
+        else:
+            qrText = "Click to reload QR code"
+        if qrText in self.driver.page_source:
             self.reload_qr()
         qr = self.driver.find_element_by_css_selector(self._SELECTORS["qrCode"])
         if filename is None:
